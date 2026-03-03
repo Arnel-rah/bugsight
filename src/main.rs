@@ -16,9 +16,9 @@ fn main() {
     let cli = Cli::parse();
 
     if let Some(error) = cli.explain {
-        println!("{} {}\n", "Analyzing:".yellow(), error);
+        println!("{} {}\n", " Analyzing:".yellow(), error);
 
-        match parsers::parse_error(&error) {
+        match analyzer::analyze(&error) {  
             Some(result) => {
                 println!("{} {}", "Type:".bold(), result.error_type.red());
                 println!("{} {}", "Message:".bold(), result.message);
