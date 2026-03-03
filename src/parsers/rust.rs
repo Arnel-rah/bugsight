@@ -15,6 +15,16 @@ pub fn parse(input: &str) -> Option<ParsedError> {
             suggestion: suggest_for_panic(&msg),
         });
     }
+    if input.contains("called `Option::unwrap()` on a `None` value")
+        || input.contains("called `Result::unwrap()` on an `Err` value")
+    {
+        return Some(ParsedError {
+            error_type: "Unwrap Error".to_string(),
+            message: input.to_string(),
+            suggestion: "Replace `.unwrap()` with `.unwrap_or()`, `.expect(\"msg\")`, or proper error handling with `?`.".to_string(),
+        });
+    }
+
     if input.contains("error[E") {
         return Some(ParsedError {
             error_type: "Compile Error".to_string(),
