@@ -1,12 +1,13 @@
+mod parsers;
+mod analyzer;
+
 use clap::Parser;
 use colored::*;
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
-#[command(about = "Debug smarter, not harder ")]
+#[command(about = "Debug smarter, not harder 🔍")]
 struct Cli {
-    #[arg(short, long)]
-    file: Option<String>,
     #[arg(short, long)]
     explain: Option<String>,
 }
@@ -15,10 +16,17 @@ fn main() {
     let cli = Cli::parse();
 
     if let Some(error) = cli.explain {
-        println!("{} {}", " Analyzing:".yellow(), error);
-    } else if let Some(file) = cli.file {
-        println!("{} {}", " Reading file:".cyan(), file);
-    } else {
-        println!("{}", " Run with --help to see options".green());
+        println!("{} {}\n", "Analyzing:".yellow(), error);
+
+        match parsers::parse_error(&error) {
+            Some(result) => {
+                println!("{} {}", "Type:".bold(), result.error_type.red());
+                println!("{} {}", "Message:".bold(), result.message);
+                println!("{} {}", "Suggestion:".green().bold(), result.suggestion);
+            }
+            None => {
+                println!("{}", "No pattern matched. Try --help.".dimmed());
+            }
+        }
     }
 }
