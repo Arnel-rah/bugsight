@@ -1,0 +1,44 @@
+use regex::Regex;
+
+pub struct ParsedError {
+    pub error_type: String,
+    pub message: String,
+    pub suggestion: String,
+}
+
+pub fn parse(input: &str) -> Option<ParsedError> {
+    if input.contains("panicked at") {
+        let msg = extract_panic_message(input);
+        return Some(ParsedError {
+            error_type: "Runtime Panic".to_string(),
+            message: msg.clone(),
+            suggestion: suggest_for_panic(&msg),
+        });
+    }
+    if input.contains("error[E") {
+        return Some(ParsedError {
+            error_type: "Compile Error".to_string(),
+            message: input.to_string(),
+            suggestion: "Run `rustc --explain Exxxx` for details.".to_string(),
+        });
+    }
+
+    None
+}
+
+fn extract_panic_message(input: &str) -> String {
+    let re = Regex::new(r"panicked at '([^']+)'").unwrap();
+    re.captures(input)
+        .map(|c| c[1].to_string())
+        .unwrap_or_else(|| input.to_string())
+}
+
+fn suggest_for_panic(msg: &str) -> String {
+    if msg.contains("index out of bounds") {
+        return "Check your array/vector length before indexing. Use `.get(i)` instead of `[i]` to avoid panics.".to_string();
+    }
+    if msg.contains("unwrap()") || msg.contains("called `Option::unwrap()`") {
+        return "Replace `.unwrap()` with `.unwrap_or()`, `.expect()`, or proper error handling with `?`.".to_string();
+    }
+    "Check the stack trace above for the exact location of the panic.".to_string()
+}
