@@ -52,3 +52,39 @@ fn suggest_for_panic(msg: &str) -> String {
     }
     "Check the stack trace above for the exact location of the panic.".to_string()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_index_out_of_bounds() {
+        let input = "thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 5'";
+        let result = parse(input).unwrap();
+        assert_eq!(result.error_type, "Runtime Panic");
+        assert!(result.suggestion.contains(".get(i)"));
+    }
+
+    #[test]
+    fn test_unwrap_on_none() {
+        let input = "called `Option::unwrap()` on a `None` value";
+        let result = parse(input).unwrap();
+        assert_eq!(result.error_type, "Unwrap Error");
+        assert!(result.suggestion.contains(".unwrap_or()"));
+    }
+
+    #[test]
+    fn test_compile_error() {
+        let input = "error[E0382]: borrow of moved value";
+        let result = parse(input).unwrap();
+        assert_eq!(result.error_type, "Compile Error");
+        assert!(result.suggestion.contains("rustc --explain"));
+    }
+
+    #[test]
+    fn test_no_match_returns_none() {
+        let input = "Everything is fine here";
+        let result = parse(input);
+        assert!(result.is_none());
+    }
+}

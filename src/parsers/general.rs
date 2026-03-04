@@ -19,3 +19,31 @@ pub fn parse(input: &str) -> Option<ParsedError> {
 
     None
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_permission_denied() {
+        let input = "permission denied: cannot open file config.toml";
+        let result = parse(input).unwrap();
+        assert_eq!(result.error_type, "Permission Error");
+        assert!(result.suggestion.contains("sudo"));
+    }
+
+    #[test]
+    fn test_file_not_found() {
+        let input = "No such file or directory: /home/user/.config";
+        let result = parse(input).unwrap();
+        assert_eq!(result.error_type, "File Not Found");
+        assert!(result.suggestion.contains("ls"));
+    }
+
+    #[test]
+    fn test_unknown_error_returns_none() {
+        let input = "some random log message";
+        let result = parse(input);
+        assert!(result.is_none());
+    }
+}
