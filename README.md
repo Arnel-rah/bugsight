@@ -1,7 +1,7 @@
 # 🔍 bugsight
 ![CI](https://github.com/Arnel-rah/bugsight/actions/workflows/ci.yml/badge.svg)
 [![Crates.io](https://img.shields.io/crates/v/bugsight.svg)](https://crates.io/crates/bugsight)
-[![Downloads](https://img.shields.io/crates/d/bugsight.svg)](https://crates.io/crates/bugsight)
+
 
 > Debug smarter, not harder.
 
