@@ -1,6 +1,18 @@
-
 use crate::parsers::ParsedError;
+use crate::ai;
 
 pub fn analyze(input: &str) -> Option<ParsedError> {
-    crate::parsers::parse_error(input)
+    if let Some(result) = crate::parsers::parse_error(input) {
+        return Some(result);
+    }
+
+    if let Some(ai_response) = ai::ask_ai(input) {
+        return Some(ParsedError {
+            error_type: "AI Analysis ".to_string(),
+            message: input.to_string(),
+            suggestion: ai_response,
+        });
+    }
+
+    None
 }
