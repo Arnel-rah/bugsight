@@ -1,8 +1,8 @@
-pub mod rust;
 pub mod general;
 pub mod golang;
-pub mod python;
 pub mod nodejs;
+pub mod python;
+pub mod rust;
 
 pub use rust::ParsedError;
 

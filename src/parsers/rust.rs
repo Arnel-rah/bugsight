@@ -59,7 +59,8 @@ mod tests {
 
     #[test]
     fn test_index_out_of_bounds() {
-        let input = "thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 5'";
+        let input =
+            "thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 5'";
         let result = parse(input).unwrap();
         assert_eq!(result.error_type, "Runtime Panic");
         assert!(result.suggestion.contains(".get(i)"));

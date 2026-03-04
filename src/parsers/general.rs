@@ -5,7 +5,8 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Permission Error".to_string(),
             message: input.to_string(),
-            suggestion: "Try running with `sudo` or check file permissions with `ls -la`.".to_string(),
+            suggestion: "Try running with `sudo` or check file permissions with `ls -la`."
+                .to_string(),
         });
     }
 

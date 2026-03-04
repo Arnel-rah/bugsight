@@ -13,7 +13,8 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Python Indentation Error".to_string(),
             message: input.to_string(),
-            suggestion: "Check your indentation — use spaces OR tabs consistently, never mix both.".to_string(),
+            suggestion: "Check your indentation — use spaces OR tabs consistently, never mix both."
+                .to_string(),
         });
     }
 
