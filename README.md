@@ -1,4 +1,5 @@
 # 🔍 bugsight
+![CI](https://github.com/Arnel-rah/bugsight/actions/workflows/ci.yml/badge.svg)
 
 > Debug smarter, not harder.
 
