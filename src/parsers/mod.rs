@@ -1,4 +1,6 @@
+pub mod docker;
 pub mod general;
+pub mod git;
 pub mod golang;
 pub mod nodejs;
 pub mod python;
@@ -12,4 +14,6 @@ pub fn parse_error(input: &str) -> Option<ParsedError> {
         .or_else(|| golang::parse(input))
         .or_else(|| python::parse(input))
         .or_else(|| nodejs::parse(input))
+        .or_else(|| docker::parse(input))
+        .or_else(|| git::parse(input))
 }
