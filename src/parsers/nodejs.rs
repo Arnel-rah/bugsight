@@ -5,7 +5,9 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Node.js Missing Module".to_string(),
             message: input.to_string(),
-            suggestion: "Run `npm install` or `npm install <module>` to install missing dependencies.".to_string(),
+            suggestion:
+                "Run `npm install` or `npm install <module>` to install missing dependencies."
+                    .to_string(),
         });
     }
 
@@ -39,7 +41,9 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Node.js Unhandled Promise".to_string(),
             message: input.to_string(),
-            suggestion: "Add `.catch()` to your promise or use `try/catch` inside an `async` function.".to_string(),
+            suggestion:
+                "Add `.catch()` to your promise or use `try/catch` inside an `async` function."
+                    .to_string(),
         });
     }
 

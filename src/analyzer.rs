@@ -1,5 +1,5 @@
-use crate::parsers::ParsedError;
 use crate::ai;
+use crate::parsers::ParsedError;
 
 pub fn analyze(input: &str) -> Option<ParsedError> {
     if let Some(result) = crate::parsers::parse_error(input) {

@@ -21,7 +21,9 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Go Undefined Symbol".to_string(),
             message: input.to_string(),
-            suggestion: "Check imports and package names. Run `go mod tidy` to fix missing dependencies.".to_string(),
+            suggestion:
+                "Check imports and package names. Run `go mod tidy` to fix missing dependencies."
+                    .to_string(),
         });
     }
 
@@ -29,7 +31,9 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Go Type Mismatch".to_string(),
             message: input.to_string(),
-            suggestion: "You're passing the wrong type. Check the expected type and cast if necessary.".to_string(),
+            suggestion:
+                "You're passing the wrong type. Check the expected type and cast if necessary."
+                    .to_string(),
         });
     }
 
@@ -37,7 +41,9 @@ pub fn parse(input: &str) -> Option<ParsedError> {
         return Some(ParsedError {
             error_type: "Go Missing Module".to_string(),
             message: input.to_string(),
-            suggestion: "Run `go get <module>` to install the missing dependency, then `go mod tidy`.".to_string(),
+            suggestion:
+                "Run `go get <module>` to install the missing dependency, then `go mod tidy`."
+                    .to_string(),
         });
     }
 

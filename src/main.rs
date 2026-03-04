@@ -1,6 +1,6 @@
-mod parsers;
-mod analyzer;
 mod ai;
+mod analyzer;
+mod parsers;
 use clap::Parser;
 use colored::*;
 use std::io::{self, BufRead};
