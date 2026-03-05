@@ -1,5 +1,6 @@
 mod ai;
 mod analyzer;
+mod history;
 mod parsers;
 
 use clap::Parser;
@@ -9,13 +10,17 @@ use std::io::{self, BufRead};
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
-#[command(version = "0.2.0")]
+#[command(version = "0.3.0")]
 #[command(about = "Debug smarter, not harder")]
 struct Cli {
     #[arg(short, long)]
     explain: Option<String>,
     #[arg(short, long)]
     file: Option<String>,
+    #[arg(long)]
+    history: bool,
+    #[arg(long)]
+    clear_history: bool,
 }
 
 fn handle_error(input: &str) {
@@ -26,6 +31,7 @@ fn handle_error(input: &str) {
             println!("{} {}", "Message:".bold(), result.message);
             println!("{} {}", "Suggestion:".green().bold(), result.suggestion);
             println!();
+            history::save(input, &result.error_type);
         }
         None => {
             println!("{}", input);
@@ -36,7 +42,11 @@ fn handle_error(input: &str) {
 fn main() {
     let cli = Cli::parse();
 
-    if let Some(error) = cli.explain {
+    if cli.history {
+        history::show();
+    } else if cli.clear_history {
+        history::clear();
+    } else if let Some(error) = cli.explain {
         handle_error(&error);
     } else if let Some(path) = cli.file {
         match fs::read_to_string(&path) {
@@ -46,7 +56,7 @@ fn main() {
                 }
             }
             Err(e) => {
-                eprintln!("{} {}: {}", "Error reading file".red(), path, e);
+                eprintln!("{} {}: {}", "Error reading file:".red(), path, e);
             }
         }
     } else {

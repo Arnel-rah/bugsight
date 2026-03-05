@@ -11,8 +11,10 @@ keywords = ["cli", "debugging", "errors", "developer-tools"]
 categories = ["command-line-utilities", "development-tools"]
 
 [dependencies]
+chrono = "0.4.44"
 clap = { version = "4", features = ["derive"] }
 colored = "2"
+dirs = "6.0.0"
 regex = "1"
 reqwest = { version = "0.13", features = ["json", "blocking"] }
 serde = { version = "1", features = ["derive"] }
