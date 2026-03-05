@@ -1,6 +1,6 @@
 [package]
 name = "bugsight"
-version = "0.3.1"
+version = "0.4.0"
 edition = "2021"
 description = "Debug smarter, not harder — CLI tool that analyzes errors and suggests fixes"
 license = "MIT"
@@ -19,3 +19,4 @@ regex = "1"
 reqwest = { version = "0.13", features = ["json", "blocking"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+toml = "1.0.4"

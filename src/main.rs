@@ -1,5 +1,6 @@
 mod ai;
 mod analyzer;
+mod config;
 mod history;
 mod parsers;
 
@@ -21,17 +22,21 @@ struct Cli {
     history: bool,
     #[arg(long)]
     clear_history: bool,
+    #[arg(long)]
+    init: bool,
 }
 
-fn handle_error(input: &str) {
-    match analyzer::analyze(input) {
+fn handle_error(input: &str, cfg: &config::Config) {
+    match analyzer::analyze(input, cfg) {
         Some(result) => {
             println!("\n{} {}", "Analyzing:".yellow(), input);
             println!("{} {}", "Type:".bold(), result.error_type.red());
             println!("{} {}", "Message:".bold(), result.message);
             println!("{} {}", "Suggestion:".green().bold(), result.suggestion);
             println!();
-            history::save(input, &result.error_type);
+            if cfg.history_enabled {
+                history::save(input, &result.error_type);
+            }
         }
         None => {
             println!("{}", input);
@@ -41,18 +46,21 @@ fn handle_error(input: &str) {
 
 fn main() {
     let cli = Cli::parse();
+    let cfg = config::load();
 
-    if cli.history {
+    if cli.init {
+        config::init();
+    } else if cli.history {
         history::show();
     } else if cli.clear_history {
         history::clear();
     } else if let Some(error) = cli.explain {
-        handle_error(&error);
+        handle_error(&error, &cfg);
     } else if let Some(path) = cli.file {
         match fs::read_to_string(&path) {
             Ok(content) => {
                 for line in content.lines() {
-                    handle_error(line);
+                    handle_error(line, &cfg);
                 }
             }
             Err(e) => {
@@ -63,7 +71,7 @@ fn main() {
         let stdin = io::stdin();
         for line in stdin.lock().lines() {
             match line {
-                Ok(l) => handle_error(&l),
+                Ok(l) => handle_error(&l, &cfg),
                 Err(_) => break,
             }
         }
