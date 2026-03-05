@@ -34,7 +34,7 @@
 <section class="hero">
   <div class="hero-left">
     <div class="version-badge">
-      <i class="fa-solid fa-circle-dot"></i> v0.2.0 &mdash; Docker &amp; Git parsers added
+      <i class="fa-solid fa-circle-dot"></i> v0.4.0 &mdash; Config file, history &amp; 10 parsers
     </div>
     <h1 class="hero-title">
       Debug<br>
@@ -90,11 +90,16 @@
     <h2 class="sec-title">Everything you need<br>to debug faster.</h2>
   </div>
   <div class="features-grid reveal d1">
-    <div class="feat-card">
-      <div class="feat-icon"><i class="fa-solid fa-bolt"></i></div>
-      <div class="feat-name">Instant local parsing</div>
-      <p class="feat-desc">Built-in parsers for the most common errors. Zero latency, fully offline.</p>
-    </div>
+   <div class="feat-card">
+  <div class="feat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+  <div class="feat-name">Error history</div>
+  <p class="feat-desc">Track all analyzed errors with <code style="color:var(--green);font-size:0.75rem">--history</code>. Clear anytime with <code style="color:var(--green);font-size:0.75rem">--clear-history</code>.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-icon"><i class="fa-solid fa-gear"></i></div>
+  <div class="feat-name">Config file</div>
+  <p class="feat-desc">Customize bugsight with <code style="color:var(--green);font-size:0.75rem">~/.bugsight.toml</code>. Enable/disable AI, history, language and more.</p>
+</div>
     <div class="feat-card">
       <div class="feat-icon"><i class="fa-solid fa-microchip"></i></div>
       <div class="feat-name">AI fallback</div>
@@ -138,6 +143,9 @@
     <div class="parser-item"><i class="fa-brands fa-node-js"></i> Node.js</div>
     <div class="parser-item"><i class="fa-brands fa-docker"></i> Docker</div>
     <div class="parser-item"><i class="fa-brands fa-git-alt"></i> Git</div>
+    <div class="parser-item"><i class="fa-brands fa-java"></i> Java</div>
+    <div class="parser-item"><i class="fa-brands fa-php"></i> PHP</div>
+    <div class="parser-item"><i class="fa-solid fa-gem"></i> Ruby</div>
     <div class="parser-item"><i class="fa-solid fa-layer-group"></i> General</div>
     <div class="parser-item dashed"><i class="fa-solid fa-plus"></i> Contribute yours</div>
   </div>
@@ -156,11 +164,11 @@
       </p>
       <div class="stats-row">
         <div class="stat">
-          <div class="stat-num">7</div>
+          <div class="stat-num">10</div>
           <div class="stat-label">Parsers</div>
         </div>
         <div class="stat">
-          <div class="stat-num">30+</div>
+          <div class="stat-num">45+</div>
           <div class="stat-label">Tests</div>
         </div>
         <div class="stat">
@@ -172,14 +180,23 @@
 
     <div class="install-right">
       <div class="cmd-block">
-        <div class="cmd-label">Install</div>
-        <div class="cmd-inner">
-          <span class="cmd-text">cargo install bugsight</span>
-          <button class="copy-btn" onclick="cp(this,'cargo install bugsight')">
-            <i class="fa-regular fa-copy"></i> Copy
-          </button>
-        </div>
-      </div>
+  <div class="cmd-label">Init config</div>
+  <div class="cmd-inner">
+    <span class="cmd-text">bugsight --init</span>
+    <button class="copy-btn" onclick="cp(this,'bugsight --init')">
+      <i class="fa-regular fa-copy"></i> Copy
+    </button>
+  </div>
+</div>
+<div class="cmd-block">
+  <div class="cmd-label">History</div>
+  <div class="cmd-inner">
+    <span class="cmd-text">bugsight --history</span>
+    <button class="copy-btn" onclick="cp(this,'bugsight --history')">
+      <i class="fa-regular fa-copy"></i> Copy
+    </button>
+  </div>
+</div>
       <div class="cmd-block">
         <div class="cmd-label">Pipe mode</div>
         <div class="cmd-inner">
