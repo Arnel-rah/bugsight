@@ -1,6 +1,9 @@
 use serde_json::json;
 
-pub fn ask_ai(error: &str) -> Option<String> {
+pub fn ask_ai(error: &str, enabled: bool) -> Option<String> {
+    if !enabled {
+        return None;
+    }
     let api_key = std::env::var("GROQ_API_KEY").ok()?;
 
     let body = json!({
