@@ -2,8 +2,11 @@ pub mod docker;
 pub mod general;
 pub mod git;
 pub mod golang;
+pub mod java;
 pub mod nodejs;
+pub mod php;
 pub mod python;
+pub mod ruby;
 pub mod rust;
 
 pub use rust::ParsedError;
@@ -16,4 +19,7 @@ pub fn parse_error(input: &str) -> Option<ParsedError> {
         .or_else(|| nodejs::parse(input))
         .or_else(|| docker::parse(input))
         .or_else(|| git::parse(input))
+        .or_else(|| java::parse(input))
+        .or_else(|| php::parse(input))
+        .or_else(|| ruby::parse(input))
 }
