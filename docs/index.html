@@ -34,7 +34,7 @@
 <section class="hero">
   <div class="hero-left">
     <div class="version-badge">
-      <i class="fa-solid fa-circle-dot"></i> v0.4.0 &mdash; Config file, history &amp; 10 parsers
+      <i class="fa-solid fa-circle-dot"></i> v0.6.0 &mdash; 11 parsers, stats, JSON output &amp; C/C++
     </div>
     <h1 class="hero-title">
       Debug<br>
@@ -125,6 +125,16 @@
       <div class="feat-name">Extensible</div>
       <p class="feat-desc">Open source. Add your own parsers for any language or framework in minutes.</p>
     </div>
+    <div class="feat-card">
+  <div class="feat-icon"><i class="fa-solid fa-chart-bar"></i></div>
+  <div class="feat-name">Error statistics</div>
+  <p class="feat-desc">See your most frequent errors with <code style="color:var(--green);font-size:0.75rem">--stats</code>. Identify patterns and fix recurring issues.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-icon"><i class="fa-solid fa-brackets-curly"></i></div>
+  <div class="feat-name">JSON output</div>
+  <p class="feat-desc">Machine-readable output with <code style="color:var(--green);font-size:0.75rem">--json</code>. Integrate bugsight into your scripts and CI/CD pipelines.</p>
+</div>
   </div>
 </section>
 
@@ -146,6 +156,9 @@
     <div class="parser-item"><i class="fa-brands fa-java"></i> Java</div>
     <div class="parser-item"><i class="fa-brands fa-php"></i> PHP</div>
     <div class="parser-item"><i class="fa-solid fa-gem"></i> Ruby</div>
+    <div class="parser-item">
+  <i class="fa-solid fa-code"></i> C / C++
+</div>
     <div class="parser-item"><i class="fa-solid fa-layer-group"></i> General</div>
     <div class="parser-item dashed"><i class="fa-solid fa-plus"></i> Contribute yours</div>
   </div>
@@ -164,7 +177,7 @@
       </p>
       <div class="stats-row">
         <div class="stat">
-          <div class="stat-num">10</div>
+          <div class="stat-num">11</div>
           <div class="stat-label">Parsers</div>
         </div>
         <div class="stat">
@@ -224,6 +237,24 @@
           </button>
         </div>
       </div>
+      <div class="cmd-block">
+  <div class="cmd-label">Statistics</div>
+  <div class="cmd-inner">
+    <span class="cmd-text">bugsight --stats</span>
+    <button class="copy-btn" onclick="cp(this,'bugsight --stats')">
+      <i class="fa-regular fa-copy"></i> Copy
+    </button>
+  </div>
+</div>
+<div class="cmd-block">
+  <div class="cmd-label">JSON output</div>
+  <div class="cmd-inner">
+    <span class="cmd-text">bugsight --explain 'error' --json</span>
+    <button class="copy-btn" onclick="cp(this,&quot;bugsight --explain \'error\' --json&quot;)">
+      <i class="fa-regular fa-copy"></i> Copy
+    </button>
+  </div>
+</div>
     </div>
   </div>
 </section>
