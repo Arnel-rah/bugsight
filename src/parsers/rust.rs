@@ -1,10 +1,5 @@
+use super::ParsedError;
 use regex::Regex;
-
-pub struct ParsedError {
-    pub error_type: String,
-    pub message: String,
-    pub suggestion: String,
-}
 
 pub fn parse(input: &str) -> Option<ParsedError> {
     if input.contains("panicked at") {
