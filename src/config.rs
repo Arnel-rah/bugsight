@@ -2,6 +2,8 @@ use serde::Deserialize;
 use std::fs;
 use std::path::PathBuf;
 
+use crate::lang::Messages;
+
 #[derive(Deserialize, Debug)]
 #[allow(dead_code)]
 pub struct Config {
@@ -56,10 +58,10 @@ pub fn load() -> Config {
     Config::default()
 }
 
-pub fn init() {
+pub fn init_with_msg(msg: &Messages) {
     if let Some(path) = config_path() {
         if path.exists() {
-            println!("Config already exists at {}", path.display());
+            println!("{} {}", msg.config_exists, path.display());
             return;
         }
 
@@ -79,8 +81,12 @@ max_history = 100
 "#;
 
         match std::fs::write(&path, default_config) {
-            Ok(_) => println!("Config created at {}", path.display()),
+            Ok(_) => println!("{} {}", msg.config_created, path.display()),
             Err(e) => eprintln!("Failed to create config: {}", e),
         }
     }
 }
+
+// pub fn init() {
+//     init_with_msg(&crate::lang::EN);
+// }
