@@ -1,6 +1,6 @@
 [package]
 name = "bugsight"
-version = "0.5.0"
+version = "0.5.2"
 edition = "2021"
 description = "Debug smarter, not harder — CLI tool that analyzes errors and suggests fixes"
 license = "MIT"
