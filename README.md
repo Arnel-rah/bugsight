@@ -1,62 +1,71 @@
-# 🔍 bugsight
+# bugsight
 
-![bugsight demo](docs/assets/demo.gif)
-![CI](https://github.com/Arnel-rah/bugsight/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/Arnel-rah/bugsight/actions/workflows/ci.yml/badge.svg)](https://github.com/Arnel-rah/bugsight/actions)
 [![Crates.io](https://img.shields.io/crates/v/bugsight.svg)](https://crates.io/crates/bugsight)
+[![Downloads](https://img.shields.io/crates/d/bugsight.svg)](https://crates.io/crates/bugsight)
 
 > Debug smarter, not harder.
 
-A fast CLI tool that analyzes errors, stack traces and logs — and tells you exactly how to fix them.
+A fast Rust CLI that analyzes errors, stack traces and logs — and tells you exactly how to fix them.
+
+![bugsight demo](docs/assets/demo.gif)
 
 ---
 
-## ✨ Features
-
-- ⚡ Instant analysis for common errors (Rust, permissions, file system...)
-- 🤖 AI fallback via Groq for any unknown error
-- 🔗 Pipe-friendly — works with any command output
-- 🖥️ Clean, colored terminal output
-
----
-
-## 📦 Installation
-
-### From source
-
+## Install
 ```bash
-git clone https://github.com/Arnel-rah/bugsight
-cd bugsight
-cargo install --path .
+cargo install bugsight
 ```
 
 ---
 
-## 🚀 Usage
-
-### Explain an error directly
-
+## Usage
 ```bash
-bugsight --explain 'segmentation fault core dumped'
-```
-
-### Pipe any command output
-
-```bash
+# Pipe any command output
 cargo build 2>&1 | bugsight
-cat logs/error.log | bugsight
-npm run build 2>&1 | bugsight
+
+# Explain an error directly
+bugsight --explain 'permission denied'
+
+# Analyze a log file
+bugsight --file logs/error.log
+
+# Show error history
+bugsight --history
+
+# Show error statistics
+bugsight --stats
+
+# Machine-readable JSON output
+bugsight --explain 'NullPointerException' --json
+
+# Create config file
+bugsight --init
 ```
 
 ---
 
-## 🤖 AI Setup (optional)
+## Supported languages
 
-bugsight uses [Groq](https://console.groq.com) for unknown errors — it's free.
+| Language | Errors covered |
+|---|---|
+| Rust | panics, compile errors, unwrap errors |
+| Go | nil pointer, index out of range, missing modules |
+| Python | ModuleNotFoundError, TypeError, KeyError, IndentationError |
+| Node.js | Cannot find module, undefined property, EADDRINUSE |
+| Docker | daemon not running, permission denied, port conflicts |
+| Git | merge conflicts, push rejected, SSH errors |
+| Java | NullPointerException, OutOfMemoryError, StackOverflow |
+| PHP | syntax errors, memory limit, undefined variables |
+| Ruby | NoMethodError, LoadError, Rails RecordNotFound |
+| C/C++ | segfault, memory leaks, linker errors, buffer overflow |
+| General | permission denied, file not found |
 
-1. Create a free account on **console.groq.com**
-2. Generate an API key
-3. Export it:
+---
 
+## AI fallback
+
+For unknown errors, bugsight uses [Groq](https://console.groq.com) (free):
 ```bash
 export GROQ_API_KEY=gsk_xxxxxx
 ```
@@ -65,26 +74,84 @@ Without the key, bugsight still works with its built-in parsers.
 
 ---
 
-## 🛠️ Built with
+## Config
+```bash
+bugsight --init
+```
 
-- [Rust](https://www.rust-lang.org/)
-- [clap](https://github.com/clap-rs/clap) — CLI parsing
-- [colored](https://github.com/mackwic/colored) — terminal colors
-- [Groq](https://groq.com) — AI inference
+Creates `~/.bugsight.toml`:
+```toml
+# Enable AI fallback
+ai_enabled = true
+
+# Save analyzed errors to history
+history_enabled = true
+
+# Language: "en" or "fr"
+language = "en"
+
+# Max errors in history
+max_history = 100
+```
 
 ---
 
-## 🤝 Contributing
+## JSON output
+```bash
+bugsight --explain 'permission denied' --json
+```
+```json
+{
+  "error_type": "Permission Error",
+  "message": "permission denied",
+  "suggestion": "Try running with sudo or check file permissions with ls -la."
+}
+```
 
-Contributions are welcome!
+---
+
+## Stats
+```bash
+bugsight --stats
+```
+```
+Error Statistics
+────────────────────────────────────────
+Type                           Count
+────────────────────────────────────────
+Permission Error               3  75% ███
+Runtime Panic                  1  25% █
+────────────────────────────────────────
+Total errors analyzed: 4
+```
+
+---
+
+## Contributing
+
+Contributions are welcome! The easiest way is to add a new parser.
 
 1. Fork the repo
-2. Create a branch: `git checkout -b feat/your-feature`
-3. Commit: `git commit -m "feat: add your feature"`
-4. Push & open a Pull Request
+2. Create a branch: `git checkout -b feat/your-parser`
+3. Add `src/parsers/your_lang.rs`
+4. Register it in `src/parsers/mod.rs`
+5. Add tests
+6. Run `cargo test`
+7. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ---
 
-## 📄 License
+## Built with
 
-MIT
+- [Rust](https://www.rust-lang.org/)
+- [clap](https://github.com/clap-rs/clap)
+- [colored](https://github.com/mackwic/colored)
+- [Groq](https://groq.com)
+
+---
+
+## License
+
+MIT © 2025 Arnel Raharinandrasana
