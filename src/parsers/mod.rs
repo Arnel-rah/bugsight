@@ -1,4 +1,5 @@
 use serde::Serialize;
+pub mod c_cpp;
 pub mod docker;
 pub mod general;
 pub mod git;
@@ -28,4 +29,5 @@ pub fn parse_error(input: &str) -> Option<ParsedError> {
         .or_else(|| java::parse(input))
         .or_else(|| php::parse(input))
         .or_else(|| ruby::parse(input))
+        .or_else(|| c_cpp::parse(input))
 }
