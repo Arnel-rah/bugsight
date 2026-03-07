@@ -1,3 +1,4 @@
+use serde::Serialize;
 pub mod docker;
 pub mod general;
 pub mod git;
@@ -9,7 +10,12 @@ pub mod python;
 pub mod ruby;
 pub mod rust;
 
-pub use rust::ParsedError;
+#[derive(Serialize)]
+pub struct ParsedError {
+    pub error_type: String,
+    pub message: String,
+    pub suggestion: String,
+}
 
 pub fn parse_error(input: &str) -> Option<ParsedError> {
     rust::parse(input)
