@@ -1,8 +1,8 @@
 # 🔍 bugsight
+
 ![bugsight demo](docs/assets/demo.gif)
 ![CI](https://github.com/Arnel-rah/bugsight/actions/workflows/ci.yml/badge.svg)
 [![Crates.io](https://img.shields.io/crates/v/bugsight.svg)](https://crates.io/crates/bugsight)
-
 
 > Debug smarter, not harder.
 
@@ -22,6 +22,7 @@ A fast CLI tool that analyzes errors, stack traces and logs — and tells you ex
 ## 📦 Installation
 
 ### From source
+
 ```bash
 git clone https://github.com/Arnel-rah/bugsight
 cd bugsight
@@ -33,11 +34,13 @@ cargo install --path .
 ## 🚀 Usage
 
 ### Explain an error directly
+
 ```bash
 bugsight --explain 'segmentation fault core dumped'
 ```
 
 ### Pipe any command output
+
 ```bash
 cargo build 2>&1 | bugsight
 cat logs/error.log | bugsight
@@ -53,6 +56,7 @@ bugsight uses [Groq](https://console.groq.com) for unknown errors — it's free.
 1. Create a free account on **console.groq.com**
 2. Generate an API key
 3. Export it:
+
 ```bash
 export GROQ_API_KEY=gsk_xxxxxx
 ```

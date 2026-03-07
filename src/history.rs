@@ -1,3 +1,5 @@
+use colored::*;
+use std::collections::HashMap;
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::path::PathBuf;
@@ -33,5 +35,52 @@ pub fn clear() {
     if let Some(path) = history_path() {
         let _ = fs::remove_file(path);
         println!("History cleared.");
+    }
+}
+
+pub fn stats() {
+    if let Some(path) = history_path() {
+        match fs::read_to_string(&path) {
+            Ok(content) if !content.is_empty() => {
+                let mut counts: HashMap<String, usize> = HashMap::new();
+                let mut total = 0;
+
+                for line in content.lines() {
+                    if let Some(start) = line.find('(') {
+                        if let Some(end) = line.find(')') {
+                            let error_type = &line[start + 1..end];
+                            *counts.entry(error_type.to_string()).or_insert(0) += 1;
+                            total += 1;
+                        }
+                    }
+                }
+                let mut sorted: Vec<(String, usize)> = counts.into_iter().collect();
+                sorted.sort_by(|a, b| b.1.cmp(&a.1));
+
+                println!("\n{}", "Error Statistics".bold());
+                println!("{}", "─".repeat(40));
+                println!("{:<30} {}", "Type".dimmed(), "Count".dimmed());
+                println!("{}", "─".repeat(40));
+
+                for (error_type, count) in &sorted {
+                    let bar = "█".repeat(*count);
+                    let percentage = (*count as f64 / total as f64 * 100.0) as usize;
+                    println!(
+                        "{:<30} {} {}% {}",
+                        error_type.red(),
+                        count.to_string().bold(),
+                        percentage,
+                        bar.green()
+                    );
+                }
+
+                println!("{}", "─".repeat(40));
+                println!("{} {}", "Total errors analyzed:".bold(), total);
+                println!();
+            }
+            _ => {
+                println!("No history yet. Run bugsight to analyze some errors first.");
+            }
+        }
     }
 }

@@ -11,17 +11,24 @@ use std::io::{self, BufRead};
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
-#[command(version = "0.3.0")]
+#[command(version = "0.5.0")]
 #[command(about = "Debug smarter, not harder")]
 struct Cli {
     #[arg(short, long)]
     explain: Option<String>,
+
     #[arg(short, long)]
     file: Option<String>,
+
     #[arg(long)]
     history: bool,
+
     #[arg(long)]
     clear_history: bool,
+
+    #[arg(long)]
+    stats: bool,
+
     #[arg(long)]
     init: bool,
 }
@@ -34,6 +41,7 @@ fn handle_error(input: &str, cfg: &config::Config) {
             println!("{} {}", "Message:".bold(), result.message);
             println!("{} {}", "Suggestion:".green().bold(), result.suggestion);
             println!();
+
             if cfg.history_enabled {
                 history::save(input, &result.error_type);
             }
@@ -54,6 +62,8 @@ fn main() {
         history::show();
     } else if cli.clear_history {
         history::clear();
+    } else if cli.stats {
+        history::stats();
     } else if let Some(error) = cli.explain {
         handle_error(&error, &cfg);
     } else if let Some(path) = cli.file {
