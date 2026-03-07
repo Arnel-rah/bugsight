@@ -2,6 +2,7 @@ mod ai;
 mod analyzer;
 mod config;
 mod history;
+mod lang;
 mod parsers;
 
 use clap::Parser;
@@ -37,6 +38,7 @@ struct Cli {
 }
 
 fn handle_error(input: &str, cfg: &config::Config, json: bool) {
+    let msg = lang::get(cfg);
     match analyzer::analyze(input, cfg) {
         Some(result) => {
             if json {
@@ -74,15 +76,16 @@ fn handle_error(input: &str, cfg: &config::Config, json: bool) {
 fn main() {
     let cli = Cli::parse();
     let cfg = config::load();
+    let msg = lang::get(&cfg);
 
     if cli.init {
-        config::init();
+        config::init_with_msg(msg);
     } else if cli.history {
-        history::show();
+        history::show_with_msg(msg);
     } else if cli.clear_history {
-        history::clear();
+        history::clear_with_msg(msg);
     } else if cli.stats {
-        history::stats();
+        history::stats_with_msg(msg);
     } else if let Some(error) = cli.explain {
         handle_error(&error, &cfg, cli.json);
     } else if let Some(path) = cli.file {
@@ -93,7 +96,7 @@ fn main() {
                 }
             }
             Err(e) => {
-                eprintln!("{} {}: {}", "Error reading file:".red(), path, e);
+                eprintln!("Error reading file {}: {}", path, e);
             }
         }
     } else {
