@@ -84,6 +84,7 @@ pub fn stats_with_msg(msg: &Messages) {
     }
 }
 
+#[allow(dead_code)]
 pub fn show() {
     if let Some(path) = history_path() {
         match fs::read_to_string(&path) {
@@ -96,10 +97,14 @@ pub fn show() {
         }
     }
 }
-
+#[allow(dead_code)]
 pub fn clear() {
     if let Some(path) = history_path() {
         let _ = fs::remove_file(path);
         println!("History cleared.");
     }
+}
+#[allow(dead_code)]
+pub fn stats() {
+    stats_with_msg(&crate::lang::EN);
 }

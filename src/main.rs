@@ -38,7 +38,7 @@ struct Cli {
 }
 
 fn handle_error(input: &str, cfg: &config::Config, json: bool) {
-    let msg = lang::get(cfg);
+    let _msg = lang::get(cfg);
     match analyzer::analyze(input, cfg) {
         Some(result) => {
             if json {

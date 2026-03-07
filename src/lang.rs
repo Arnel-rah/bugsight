@@ -1,5 +1,6 @@
 use crate::config::Config;
 
+#[allow(dead_code)]
 pub struct Messages {
     pub analyzing: &'static str,
     pub error_type: &'static str,
