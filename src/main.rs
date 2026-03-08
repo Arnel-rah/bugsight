@@ -4,6 +4,7 @@ mod config;
 mod history;
 mod lang;
 mod parsers;
+mod watcher;
 
 use clap::Parser;
 use colored::*;
@@ -35,6 +36,9 @@ struct Cli {
 
     #[arg(long)]
     init: bool,
+
+    #[arg(short, long)]
+    watch: Option<String>,
 }
 
 fn handle_error(input: &str, cfg: &config::Config, json: bool) {
@@ -86,6 +90,8 @@ fn main() {
         history::clear_with_msg(msg);
     } else if cli.stats {
         history::stats_with_msg(msg);
+    } else if let Some(watch_path) = cli.watch {
+        watcher::watch(&watch_path, &cfg);
     } else if let Some(error) = cli.explain {
         handle_error(&error, &cfg, cli.json);
     } else if let Some(path) = cli.file {
