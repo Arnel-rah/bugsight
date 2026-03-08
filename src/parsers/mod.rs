@@ -5,11 +5,13 @@ pub mod general;
 pub mod git;
 pub mod golang;
 pub mod java;
+pub mod kotlin;
 pub mod nodejs;
 pub mod php;
 pub mod python;
 pub mod ruby;
 pub mod rust;
+pub mod swift;
 
 #[derive(Serialize)]
 pub struct ParsedError {
@@ -30,4 +32,6 @@ pub fn parse_error(input: &str) -> Option<ParsedError> {
         .or_else(|| php::parse(input))
         .or_else(|| ruby::parse(input))
         .or_else(|| c_cpp::parse(input))
+        .or_else(|| swift::parse(input))
+        .or_else(|| kotlin::parse(input))
 }
