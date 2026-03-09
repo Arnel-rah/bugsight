@@ -1,6 +1,7 @@
 mod ai;
 mod analyzer;
 mod config;
+mod daemon;
 mod history;
 mod lang;
 mod parsers;
@@ -13,7 +14,7 @@ use std::io::{self, BufRead};
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
-#[command(version = "0.5.1")]
+#[command(version = "0.9.0")]
 #[command(about = "Debug smarter, not harder")]
 struct Cli {
     #[arg(short, long)]
@@ -21,6 +22,12 @@ struct Cli {
 
     #[arg(short, long)]
     file: Option<String>,
+
+    #[arg(short, long)]
+    daemon: bool,
+
+    #[arg(short, long, default_value = "7878")]
+    port: u16,
 
     #[arg(long)]
     history: bool,
@@ -90,6 +97,8 @@ fn main() {
         history::clear_with_msg(msg);
     } else if cli.stats {
         history::stats_with_msg(msg);
+    } else if cli.daemon {
+        daemon::start(&cfg, cli.port);
     } else if let Some(watch_path) = cli.watch {
         watcher::watch(&watch_path, &cfg);
     } else if let Some(error) = cli.explain {
