@@ -30,6 +30,13 @@ bugsight --explain 'permission denied'
 # Analyze a log file
 bugsight --file logs/error.log
 
+# Watch a log file in real-time
+bugsight --watch logs/app.log
+
+# Start daemon mode (REST API)
+bugsight --daemon
+bugsight --daemon --port 9000
+
 # Show error history
 bugsight --history
 
@@ -41,6 +48,37 @@ bugsight --explain 'NullPointerException' --json
 
 # Create config file
 bugsight --init
+```
+
+---
+
+## Daemon mode
+
+Start bugsight as a local REST API:
+```bash
+bugsight --daemon
+# bugsight daemon running on http://localhost:7878
+```
+
+Analyze errors from any tool or IDE:
+```bash
+# Health check
+curl http://localhost:7878/health
+
+# Analyze an error
+curl http://localhost:7878/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"error": "NullPointerException"}'
+```
+
+Response:
+```json
+{
+  "error_type": "Java NullPointerException",
+  "found": true,
+  "message": "NullPointerException",
+  "suggestion": "An object is null. Add a null check with if (obj != null) or use Optional<T>."
+}
 ```
 
 ---
@@ -59,6 +97,8 @@ bugsight --init
 | PHP | syntax errors, memory limit, undefined variables |
 | Ruby | NoMethodError, LoadError, Rails RecordNotFound |
 | C/C++ | segfault, memory leaks, linker errors, buffer overflow |
+| Swift | nil unwrap, EXC_BAD_ACCESS, type mismatch |
+| Kotlin | unresolved reference, type mismatch, ClassCastException |
 | General | permission denied, file not found |
 
 ---
@@ -148,6 +188,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 - [Rust](https://www.rust-lang.org/)
 - [clap](https://github.com/clap-rs/clap)
 - [colored](https://github.com/mackwic/colored)
+- [tiny_http](https://github.com/tiny-http/tiny-http)
 - [Groq](https://groq.com)
 
 ---
