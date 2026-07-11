@@ -1,32 +1,38 @@
 use anyhow::{Context, Result};
+use std::{fs, io::{self, BufRead}};
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
     let cfg = config::load();
     let msg = lang::get(&cfg);
 
-    match cli {
-        Cli { init: true, .. }          => config::init_with_msg(msg),
-        Cli { history: true, .. }       => history::show_with_msg(msg),
-        Cli { clear_history: true, .. } => history::clear_with_msg(msg),
-        Cli { stats: true, .. }         => history::stats_with_msg(msg),
-        Cli { daemon: true, .. }        => daemon::start(&cfg, cli.port),
-        Cli { watch: Some(path), .. }   => watcher::watch(&path, &cfg),
-        Cli { explain: Some(err), .. }  => handle_error(&err, &cfg, cli.json)?,
-        Cli { file: Some(path), .. }    => handle_file_input(&path, &cfg, cli.json)?,
-        _                               => handle_stdin_input(&cfg, cli.json)?,
+    let Cli {
+        init, history, clear_history, stats,
+        daemon, port, watch, explain, file, json
+    } = cli;
+
+    match (init, history, clear_history, stats, daemon, watch, explain, file) {
+        (true, ..)            => config::init_with_msg(msg),
+        (_, true, ..)         => history::show_with_msg(msg),
+        (_, _, true, ..)      => history::clear_with_msg(msg),
+        (_, _, _, true, ..)   => history::stats_with_msg(msg),
+        (_, _, _, _, true, ..)=> daemon::start(&cfg, port),
+        (_, _, _, _, _, Some(path), ..)  => watcher::watch(&path, &cfg),
+        (_, _, _, _, _, _, Some(err), ..) => handle_error(&err, &cfg, json)?,
+        (_, _, _, _, _, _, _, Some(path)) => handle_file_input(&path, &cfg, json)?,
+        _                     => handle_stdin_input(&cfg, json)?,
     }
 
     Ok(())
 }
 
-fn process_lines<'a>(
-    lines: impl Iterator<Item = &'a str>,
-    cfg: &config::Config,
-    json: bool,
-) -> Result<()> {
+fn process_lines<I, S>(lines: I, cfg: &config::Config, json: bool) -> Result<()>
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<str>,
+{
     for line in lines {
-        handle_error(line, cfg, json)?;
+        handle_error(line.as_ref(), cfg, json)?;
     }
     Ok(())
 }
@@ -39,9 +45,8 @@ fn handle_file_input(path: &str, cfg: &config::Config, json: bool) -> Result<()>
 
 fn handle_stdin_input(cfg: &config::Config, json: bool) -> Result<()> {
     let stdin = io::stdin();
-    let lines = stdin.lock().lines().map_while(Result::ok);
-    for line in lines {
-        handle_error(&line, cfg, json)?;
-    }
-    Ok(())
+    let lines: Result<Vec<String>, _> = stdin.lock().lines().collect();
+    let lines = lines.context("Failed to read from stdin")?;
+
+    process_lines(lines, cfg, json)
 }
