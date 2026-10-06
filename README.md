@@ -24,6 +24,9 @@ cargo install bugsight
 # Pipe any command output
 cargo build 2>&1 | bugsight
 
+# Analyze a complete multiline traceback
+python3 app.py 2>&1 | bugsight
+
 # Explain an error directly
 bugsight --explain 'permission denied'
 
@@ -49,6 +52,43 @@ bugsight --explain 'NullPointerException' --json
 # Create config file
 bugsight --init
 ```
+
+## Multiline diagnostics
+
+Bugsight groups supported stack traces and compiler diagnostics before analyzing
+them. This keeps the error message, file location, and surrounding context
+together instead of analyzing each log line independently.
+
+Supported multiline formats include:
+
+- Python tracebacks
+- Rust compiler errors and panics
+- Java-style exceptions
+- Lua stack traces
+
+For example, a Python traceback is returned as one diagnostic:
+
+```bash
+printf 'Traceback (most recent call last):\n  File "app.py", line 2\nModuleNotFoundError: No module named "requests"\n' \
+  | bugsight --json
+```
+
+```json
+{
+  "error_type": "Python Missing Module",
+  "message": "Traceback (most recent call last):\n  File \"app.py\", line 2\nModuleNotFoundError: No module named 'requests'",
+  "suggestion": "Run `pip install <module>` to install the missing package. If in a venv, activate it first."
+}
+```
+
+The same behavior applies when analyzing a log file:
+
+```bash
+bugsight --file logs/error.log --json
+```
+
+Ordinary lines that are not part of a recognized diagnostic remain processed
+individually.
 
 ---
 
