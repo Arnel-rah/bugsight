@@ -17,7 +17,7 @@ use std::{
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
-#[command(version = "1.0.0")]
+#[command(version)]
 #[command(about = "Debug smarter, not harder")]
 struct Cli {
     #[arg(short, long)]
@@ -139,6 +139,23 @@ where
     I: IntoIterator<Item = S>,
     S: AsRef<str>,
 {
+    let lines: Vec<String> = lines
+        .into_iter()
+        .map(|line| line.as_ref().to_string())
+        .collect();
+
+    let multiline_input = lines.join("\n");
+    let is_multiline_diagnostic = lines.len() > 1
+        && (multiline_input.contains("Traceback (most recent call last):")
+            || multiline_input.contains("error[")
+            || multiline_input.contains("panicked at")
+            || multiline_input.contains("Exception:")
+            || multiline_input.contains("stack traceback"));
+
+    if is_multiline_diagnostic {
+        return handle_error(&multiline_input, cfg, json);
+    }
+
     for line in lines {
         handle_error(line.as_ref(), cfg, json)?;
     }
