@@ -58,7 +58,7 @@ pub fn stats_with_msg(msg: &Messages) {
                 }
 
                 let mut sorted: Vec<(String, usize)> = counts.into_iter().collect();
-                sorted.sort_by(|a, b| b.1.cmp(&a.1));
+                sorted.sort_by_key(|a| std::cmp::Reverse(a.1));
 
                 println!("\n{}", msg.error_stats.bold());
                 println!("{}", "─".repeat(40));
