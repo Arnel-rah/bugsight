@@ -10,7 +10,10 @@ mod watcher;
 use anyhow::{Context, Result};
 use clap::Parser;
 use colored::*;
-use std::{fs, io::{self, BufRead}};
+use std::{
+    fs,
+    io::{self, BufRead},
+};
 
 #[derive(Parser)]
 #[command(name = "bugsight")]
@@ -54,20 +57,37 @@ fn main() -> Result<()> {
     let msg = lang::get(&cfg);
 
     let Cli {
-        init, history, clear_history, stats,
-        daemon, port, watch, explain, file, json
+        init,
+        history,
+        clear_history,
+        stats,
+        daemon,
+        port,
+        watch,
+        explain,
+        file,
+        json,
     } = cli;
 
-    match (init, history, clear_history, stats, daemon, watch, explain, file) {
-        (true, ..)            => config::init_with_msg(msg),
-        (_, true, ..)         => history::show_with_msg(msg),
-        (_, _, true, ..)      => history::clear_with_msg(msg),
-        (_, _, _, true, ..)   => history::stats_with_msg(msg),
-        (_, _, _, _, true, ..)=> daemon::start(&cfg, port),
-        (_, _, _, _, _, Some(path), ..)  => watcher::watch(&path, &cfg),
+    match (
+        init,
+        history,
+        clear_history,
+        stats,
+        daemon,
+        watch,
+        explain,
+        file,
+    ) {
+        (true, ..) => config::init_with_msg(msg),
+        (_, true, ..) => history::show_with_msg(msg),
+        (_, _, true, ..) => history::clear_with_msg(msg),
+        (_, _, _, true, ..) => history::stats_with_msg(msg),
+        (_, _, _, _, true, ..) => daemon::start(&cfg, port),
+        (_, _, _, _, _, Some(path), ..) => watcher::watch(&path, &cfg),
         (_, _, _, _, _, _, Some(err), ..) => handle_error(&err, &cfg, json)?,
         (_, _, _, _, _, _, _, Some(path)) => handle_file_input(&path, &cfg, json)?,
-        _                     => handle_stdin_input(&cfg, json)?,
+        _ => handle_stdin_input(&cfg, json)?,
     }
 
     Ok(())
@@ -126,8 +146,7 @@ where
 }
 
 fn handle_file_input(path: &str, cfg: &config::Config, json: bool) -> Result<()> {
-    let content = fs::read_to_string(path)
-        .with_context(|| format!("Cannot read file '{path}'"))?;
+    let content = fs::read_to_string(path).with_context(|| format!("Cannot read file '{path}'"))?;
     process_lines(content.lines(), cfg, json)
 }
 
